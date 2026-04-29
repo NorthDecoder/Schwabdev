@@ -1,0 +1,19 @@
+name: Sync with Upstream
+
+on:
+  schedule:
+    - cron: '0 8 * * 0'  # Sunday midnight PT (8:00 AM UTC)
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync fork with upstream
+        run: gh repo sync ${{ github.repository }} --source tylerebowers/Schwabdev --branch main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+# credit: https://github.com/Dindascene/
