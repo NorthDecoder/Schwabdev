@@ -22,6 +22,7 @@ client = schwabdev.Client(
     encryption=None,
     timeout=10,
     call_on_auth=None,
+    open_browser_for_auth=True
 )
 ```
 
@@ -32,6 +33,7 @@ client = schwabdev.Client(
 * `encryption` `(str | None)`: Encryption key to encrypt the tokens database, if `None` then no encryption is used. To create a key use `from cryptography.fernet import Fernet` and run `key = Fernet.generate_key()`, save the key using the string representation `key.decode()`. See example in <a target="_blank" href="https://github.com/tylerebowers/Schwabdev/blob/main/docs/examples/extra/encrypted_db_setup.py">encrypted_db_setup.py</a>.
 * `timeout (int)`: Request timeout in seconds (how long to wait for a response).
 * `call_on_auth (function | None)`: Function to call for authentication, the function is called with one argument: the URL to visit for authentication, it is expected to return the full callback URL or code from the callback URL after the user has signed in, see an example in <a target="_blank" href="https://github.com/tylerebowers/Schwabdev/blob/main/docs/examples/extra/capture_callback.py">capture_callback.py</a>.
+* `open_browser_for_auth (bool)`: Whether to open a browser to visit the callback URL for authentication (in cases where attempting to open a webbrowser blocks the program).
 
 ---
 

@@ -3,6 +3,6 @@ __pycache__/
 *.env
 dist/
 schwabdev.egg-info/
-tokens.json
+tokens.db
 /build
 /docs/examples/tests

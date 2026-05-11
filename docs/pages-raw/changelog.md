@@ -1,3 +1,11 @@
+## Version 3.0.5
+* Added support for new app secret / app key lengths
+
+## Version 3.0.4
+* Better handling of stream crashes
+* Improved handling of streamer info
+* Added param to stop webbrowser from opening
+
 ## Version 3.0.3
 * Better handling of internal streamer info api request.
 

@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "schwabdev"
-version = "3.0.3"
+version = "3.0.5"
 description = "An easy and lightweight wrapper for using the Charles Schwab API."
 readme = { file = "README.md", content-type = "text/markdown" }
-authors = [{name = "Tyler Bowers", email = "tylerebowers@gmail.com"}]
+authors = [{name = "Tyler Bowers"}, {email = "tylerebowers@gmail.com"}]
 requires-python = ">=3.11"
 license = "MIT"
 dependencies = [
