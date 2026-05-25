@@ -17,6 +17,7 @@ dependencies = [
     'websockets == 16.0',
     'cryptography == 47.0.0',
 ]
+
 keywords = [
     "python", 
     "schwab", 
@@ -45,3 +46,9 @@ Documentation = "https://tylerebowers.github.io/Schwabdev/"
 Source = "https://github.com/tylerebowers/Schwabdev"
 Youtube = "https://www.youtube.com/playlist?list=PLs4JLWxBQIxpbvCj__DjAc0RRTlBz-TR8"
 PyPI = "https://pypi.org/project/schwabdev/"
+
+[project.optional-dependencies]
+test = [
+    'python-dotenv == 1.2.2'
+]
+
