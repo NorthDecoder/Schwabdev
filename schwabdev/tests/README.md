@@ -1,0 +1,27 @@
+# End to End testing code from the Develop branch
+
+Test code coverage and Schwab API connectivity
+
+The second test requests a valid Schwab credential which is
+encrypted and stored in the .env file.
+
+## Install test prerequisite packages
+
+`pip install -e .[test]`
+
+## Run a specific test file
+
+`python -m unittest test_01prerequisites.py`
+`python -m unittest test_02encryptcreds.py`
+
+## Search for and run all the tests
+
+The test files are named with a sequence number indicating the order that
+the tests should be run. It appears that the discover feature respects
+the sequence numbers.
+
+```bash
+cd ~/Schwabdev
+python -m unittest discover -vv
+```
+
