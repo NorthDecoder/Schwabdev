@@ -2,6 +2,7 @@ from dotenv import dotenv_values
 from dotenv import set_key
 from dotenv import unset_key
 from pathlib import Path    # manage paths
+import re
 import sqlite3
 import unittest
 
@@ -45,8 +46,15 @@ class TestPrerequisites(unittest.TestCase):
         self.assertTrue(gitignore.exists(), f".gitignore not found at {gitignore}")
 
     def test_gitignore_contains_env_pattern(self):
+        """
+        Make sure there is a *.env on one line in the .gitignore
+        file and that the the text is at the very beginning of the
+        line, ie not commented out.
+        """
         gitignore = Path(__file__).resolve().parents[2] / ".gitignore"
-        self.assertIn("*.env", gitignore.read_text(), ".gitignore does not contain '*.env'")
+        ignored_text = gitignore.read_text()
+        pattern = re.compile(r"^\*\.env$", re.MULTILINE)
+        self.assertRegex(ignored_text,pattern,msg=None)
 
     def test_sqlite_running(self):
         conn = sqlite3.connect(':memory:')  # Connect to an in-memory database
