@@ -52,3 +52,6 @@ test = [
     'python-dotenv == 1.2.2'
 ]
 
+lint = [
+    'black == 26.5.1'
+]
