@@ -57,6 +57,11 @@ lint = [
     'black == 26.5.1'
 ]
 
+security = [
+    'pip-audit',
+    'pipdeptree'
+]
+
 [tool.coverage.run]
 omit = [
     "*/tests/*"
