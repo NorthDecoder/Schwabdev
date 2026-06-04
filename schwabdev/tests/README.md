@@ -25,3 +25,22 @@ cd ~/Schwabdev
 python -m unittest discover -vv
 ```
 
+## Code coverage reports
+
+### For a test
+
+
+```bash
+coverage run -m unittest schwabdev/tests/test_01prerequisites.py
+
+coverage report -m
+```
+
+### For all the tests
+
+```bash
+coverage run -m unittest discover -vv
+
+coverage report -m
+```
+
