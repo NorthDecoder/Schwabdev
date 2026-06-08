@@ -121,6 +121,13 @@ class TestEncryption(unittest.TestCase):
             print(" Exiting early, cannot proceed, invalid appkey OR appsecret")
 
 
+        # Get a list of methods using dir()
+        self.methods_list = [method for method in dir(self.client) if
+                       callable(getattr(self.client, method))
+                       and not method.startswith("__")
+                       and not method.startswith("_")]
+
+
     def test_connect_client_to_api(self):
         client_obj_str = str(self.client)
 
@@ -132,14 +139,11 @@ class TestEncryption(unittest.TestCase):
 
 
     def test_count_the_class_methods(self):
-        """ Count the public methods """
-        # Get a list of methods using dir()
-        methods_list = [method for method in dir(self.client) if
-                       callable(getattr(self.client, method))
-                       and not method.startswith("__")
-                       and not method.startswith("_")]
-
-        self.assertTrue(len(methods_list) == 25)
+        """
+            Count the public methods
+            Compare to manual inspection count
+        """
+        self.assertTrue(len(self.methods_list) == 25)
 #
 
 if __name__ == "__main__":
