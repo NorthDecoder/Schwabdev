@@ -132,9 +132,11 @@ class TestEncryption(unittest.TestCase):
 #
 
 if __name__ == "__main__":
-    #test_order = []
-    #test_loader = unittest.TestLoader()
-    #test_loader.sortTestMethodsUser = \
-    #        lambda x, y: test_order.index(x) - test_order.index(y)
-    #unittest.main(testLoader=test_loader)
+    test_order = [
+        test_connect_client_to_api,
+    ]
+    test_loader = unittest.TestLoader()
+    test_loader.sortTestMethodsUser = \
+            lambda x, y: test_order.index(x) - test_order.index(y)
+    unittest.main(testLoader=test_loader)
     unittest.main()
