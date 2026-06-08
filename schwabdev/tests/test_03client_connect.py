@@ -44,7 +44,7 @@ class TestEncryption(unittest.TestCase):
 
     #
 
-    def decrypt_data(self, key, encrypted_data):
+    def decrypt_data(key, encrypted_data):
         f = Fernet(key)
         decrypted_data = f.decrypt(encrypted_data).decode()
         return decrypted_data
@@ -92,13 +92,13 @@ class TestEncryption(unittest.TestCase):
 
         # Create Fernet key from passphrase
         self.key = codecs.encode(bytes(pass_phrase+pass_phrase,'utf-8'),'base64')
-        fernet_key = Fernet(self.key)
+        #fernet_key = Fernet(self.key)
 
         # Expecting the .env file already has the encrypted app_key and app_secret
         # from a previous step in the test sequence
 
 
-    def test_connect_client_to_api(self):
+
         connect_with = dotenv_values(self.dep)
 
         appkey_encrypted = connect_with['app_key']
@@ -109,18 +109,20 @@ class TestEncryption(unittest.TestCase):
         appsecret = self.decrypt_data(self.key, appsecret_encrypted)
 
         try:
-            client = schwabdev.Client(appkey, appsecret)
-            print("\n Test connected with client:\n", client)
+            self.client = schwabdev.Client(appkey, appsecret)
+            print("\n Test connected with client:\n", self.client)
             # expecing something like
             # client: <schwabdev.client.Client object at 0x7f5fd0c0b0e0>
         except Exception as e:
             print("file:", Path(__file__))
-            print(" in function test_connect_client_to_api")
+            print(" in function setUpClass")
             print("\nError:\n",e)
             print(" Expecting a valid appkey and appsecret")
             print(" Exiting early, cannot proceed, invalid appkey OR appsecret")
 
-        client_obj_str = str(client)
+
+    def test_connect_client_to_api(self):
+        client_obj_str = str(self.client)
 
         pattern = re.compile(r'schwabdev.client.Client')
         match_list = re.findall(pattern,client_obj_str)
@@ -129,6 +131,15 @@ class TestEncryption(unittest.TestCase):
         self.assertTrue(match_list == ['schwabdev.client.Client'] , msg)
 
 
+    def test_count_the_class_methods(self):
+        """ Count the public methods """
+        # Get a list of methods using dir()
+        methods_list = [method for method in dir(self.client) if
+                       callable(getattr(self.client, method))
+                       and not method.startswith("__")
+                       and not method.startswith("_")]
+
+        self.assertTrue(len(methods_list) == 25)
 #
 
 if __name__ == "__main__":
