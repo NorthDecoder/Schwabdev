@@ -159,6 +159,13 @@ class TestClientMethods(unittest.TestCase):
         ]
         msg = "Expecting the first key to have a valid account type"
         self.assertTrue(account_type in schwab_types, msg)
+
+    def test_account_details_all(self):
+        """A list of all accounts details"""
+        ada = self.client.account_details_all().json()
+        msg = "Expecting account_details_all to return a list."
+        self.assertTrue(type(ada) == list, msg)
+
 #
 
 if __name__ == "__main__":
