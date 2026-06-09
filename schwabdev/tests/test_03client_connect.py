@@ -11,7 +11,7 @@ import unittest
 # software under test (sut)
 import schwabdev
 
-class TestEncryption(unittest.TestCase):
+class TestClientMethods(unittest.TestCase):
 
     # class variables
     app_key_input = ""
