@@ -1,3 +1,4 @@
+import datetime
 import codecs
 from cryptography.fernet import Fernet
 from dotenv import dotenv_values
@@ -127,6 +128,11 @@ class TestClientMethods(unittest.TestCase):
                        and not method.startswith("__")
                        and not method.startswith("_")]
 
+        linked_accounts = self.client.linked_accounts().json()
+        # get first linked account
+        self.account_hash_01 = linked_accounts[0].get('hashValue')
+
+    #
 
     def test_connect_client_to_api(self):
         client_obj_str = str(self.client)
@@ -146,10 +152,7 @@ class TestClientMethods(unittest.TestCase):
         self.assertTrue(len(self.methods_list) == 25)
 
     def test_account_details(self):
-        linked_accounts = self.client.linked_accounts().json()
-        # get first linked account
-        account_hash = linked_accounts[0].get('hashValue')
-        ad_dict = self.client.account_details(account_hash).json()
+        ad_dict = self.client.account_details(self.account_hash_01).json()
         self.assertTrue(type(ad_dict) == dict)
         account_type = next(iter(ad_dict))
         schwab_types = [
