@@ -169,6 +169,17 @@ class TestClientMethods(unittest.TestCase):
         msg = "Expecting account_details_all to return a list."
         self.assertTrue(type(ada) == list, msg)
 
+
+    def test_account_orders(self):
+        """ Retrieve account orders in the last 30 days """
+        today = datetime.datetime.now(datetime.timezone.utc)
+        days_ago = datetime.timedelta(days=30)
+        cao = self.client.account_orders(self.account_hash_01,
+                              today - days_ago,
+                              today).json()
+        msg = "Expecting account_orders to return a list"
+        self.assertTrue(type(cao) == list, msg)
+
 #
 
 if __name__ == "__main__":
