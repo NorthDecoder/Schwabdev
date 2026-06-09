@@ -174,11 +174,17 @@ class TestClientMethods(unittest.TestCase):
         """ Retrieve account orders in the last 30 days """
         today = datetime.datetime.now(datetime.timezone.utc)
         days_ago = datetime.timedelta(days=30)
+        start = today - days_ago
+        end = today
         cao = self.client.account_orders(self.account_hash_01,
-                              today - days_ago,
-                              today).json()
+                              start,
+                              end).json()
         msg = "Expecting account_orders to return a list"
         self.assertTrue(type(cao) == list, msg)
+
+    def test_account_orders_all(self):
+        print("\nDEBUGGING self.methods_list:\n", self.methods_list)
+
 
 #
 
