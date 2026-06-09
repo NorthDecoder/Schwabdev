@@ -144,6 +144,21 @@ class TestEncryption(unittest.TestCase):
             Compare to manual inspection count
         """
         self.assertTrue(len(self.methods_list) == 25)
+
+    def test_account_details(self):
+        linked_accounts = self.client.linked_accounts().json()
+        # get first linked account
+        account_hash = linked_accounts[0].get('hashValue')
+        ad_dict = self.client.account_details(account_hash).json()
+        self.assertTrue(type(ad_dict) == dict)
+        account_type = next(iter(ad_dict))
+        schwab_types = [
+            "securitiesAccount",
+            "otherAccount2",
+            "otherAccount3"
+        ]
+        msg = "Expecting the first key to have a valid account type"
+        self.assertTrue(account_type in schwab_types, msg)
 #
 
 if __name__ == "__main__":
