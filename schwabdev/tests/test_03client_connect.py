@@ -182,9 +182,18 @@ class TestClientMethods(unittest.TestCase):
         msg = "Expecting account_orders to return a list"
         self.assertTrue(type(cao) == list, msg)
 
-    def test_account_orders_all(self):
-        print("\nDEBUGGING self.methods_list:\n", self.methods_list)
 
+    def test_account_orders_all(self):
+        """ Retrieve all account orders in the last 30 days """
+        today = datetime.datetime.now(datetime.timezone.utc)
+        days_ago = datetime.timedelta(days=30)
+        start = today - days_ago
+        end = today
+        caoa = self.client.account_orders_all(
+                              start,
+                              end).json()
+        msg = "Expecting account_orders_all to return a list"
+        self.assertTrue(type(caoa) == list, msg)
 
 #
 
