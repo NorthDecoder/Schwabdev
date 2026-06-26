@@ -6,7 +6,6 @@ from dotenv import set_key
 from getpass import getpass # get password w/o echo
 from pathlib import Path    # manage paths
 import re
-#import sqlite3
 import unittest
 
 # software under test (sut)
