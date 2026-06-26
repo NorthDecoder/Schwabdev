@@ -6,7 +6,6 @@ from dotenv import set_key
 from getpass import getpass # get password w/o echo
 from pathlib import Path    # manage paths
 import re
-#import sqlite3
 import unittest
 
 # software under test (sut)
@@ -91,14 +90,11 @@ class TestClientMethods(unittest.TestCase):
                 print("\npass_phrase length not equal to 16!\n")
 
 
-        # Create Fernet key from passphrase
+        # Encode a key from the user supplied passphrase
         self.key = codecs.encode(bytes(pass_phrase+pass_phrase,'utf-8'),'base64')
-        #fernet_key = Fernet(self.key)
 
         # Expecting the .env file already has the encrypted app_key and app_secret
         # from a previous step in the test sequence
-
-
 
         connect_with = dotenv_values(self.dep)
 
