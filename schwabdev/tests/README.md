@@ -13,6 +13,8 @@ encrypted and stored in the .env file.
 
 `python -m unittest test_01prerequisites.py`
 `python -m unittest test_02encryptcreds.py`
+`python -m unittest test_03client_connect.py`
+`python -m unittest test_04client_quote.py`
 
 ## Search for and run all the tests
 
