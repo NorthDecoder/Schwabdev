@@ -276,7 +276,7 @@ class TestClientMethods(unittest.TestCase):
 
 if __name__ == "__main__":
     test_order = [
-        test_connect_client_to_api,
+        "test_connect_client_to_api",
     ]
     test_loader = unittest.TestLoader()
     test_loader.sortTestMethodsUser = \

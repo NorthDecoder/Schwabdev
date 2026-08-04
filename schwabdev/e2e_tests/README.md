@@ -11,10 +11,13 @@ encrypted and stored in the .env file.
 
 ## Run a specific test file
 
-`python -m unittest test_01prerequisites.py`
-`python -m unittest test_02encryptcreds.py`
-`python -m unittest test_03client_connect.py`
-`python -m unittest test_04client_quote.py`
+```bash
+python -m unittest test_01prerequisites.py
+python -m unittest test_02encryptcreds.py
+python -m unittest test_03client_connect.py
+python -m unittest test_04client_quote.py
+python -m unittest test_05client_quotes.py
+```
 
 ## Search for and run all the tests
 
