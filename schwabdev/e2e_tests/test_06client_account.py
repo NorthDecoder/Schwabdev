@@ -168,7 +168,7 @@ class TestClientMethods(unittest.TestCase):
             self.assertIn(item, account_dict, msg)
 
         qty_accounts = len(accounts_list)
-        msg = "Expecing to have only one account in the accounts list."
+        msg = "Expecting to have only one account in the accounts list."
         msg += " These tests were only written with one account linked."
         msg += f" The test found {qty_accounts} linked accounts."
         self.assertTrue(qty_accounts == 1, msg)
