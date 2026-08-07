@@ -3,13 +3,14 @@ import codecs
 from cryptography.fernet import Fernet
 from dotenv import dotenv_values
 from dotenv import set_key
-from getpass import getpass # get password w/o echo
-from pathlib import Path    # manage paths
+from getpass import getpass  # get password w/o echo
+from pathlib import Path  # manage paths
 import re
 import unittest
 
 # software under test (sut)
 import schwabdev
+
 
 class TestClientMethods(unittest.TestCase):
 
@@ -32,10 +33,10 @@ class TestClientMethods(unittest.TestCase):
         """
         git_ignore_path = Path(__file__).resolve().parents[2] / ".gitignore"
         ignored_text = git_ignore_path.read_text()
-        pattern = re.compile(r'\n\*\.env')
-        match_list = re.findall(pattern,ignored_text)
+        pattern = re.compile(r"\n\*\.env")
+        match_list = re.findall(pattern, ignored_text)
 
-        if match_list == ['\n*.env']:
+        if match_list == ["\n*.env"]:
             result = True
         else:
             result = False
@@ -55,12 +56,12 @@ class TestClientMethods(unittest.TestCase):
     def setUpClass(self):
         print("\n")
         print("Attempting to connect the SchwabDev client to the API")
-        print(24*"==")
+        print(24 * "==")
 
         self.dep = self.get_path_of_dot_env(self)
 
         if self.confirm_ignore_dot_env(self) == True:
-            pass # dot_env is ignored
+            pass  # dot_env is ignored
         else:
             print("\nDANGER: There is no *.env in the .gitignore file!")
             print("Exiting early.\n")
@@ -77,9 +78,9 @@ class TestClientMethods(unittest.TestCase):
             exit()
         #
 
-        print("\n",15 * "* ~ ")
+        print("\n", 15 * "* ~ ")
         print("Preparing to recover the encrypted key and secret from the .env file")
-        print("\n",15 * "* ~ ")
+        print("\n", 15 * "* ~ ")
         pass_phrase = ""
         while len(pass_phrase) != 16:
             print("Enter the sixteen digit passphrase previously memorized: ")
@@ -89,19 +90,18 @@ class TestClientMethods(unittest.TestCase):
             else:
                 print("\npass_phrase length not equal to 16!\n")
 
-
         # Encode a key from the user supplied passphrase
-        self.key = codecs.encode(bytes(pass_phrase+pass_phrase,'utf-8'),'base64')
+        self.key = codecs.encode(bytes(pass_phrase + pass_phrase, "utf-8"), "base64")
 
         # Expecting the .env file already has the encrypted app_key and app_secret
         # from a previous step in the test sequence
 
         connect_with = dotenv_values(self.dep)
 
-        appkey_encrypted = connect_with['app_key']
-        appsecret_encrypted = connect_with['app_secret']
+        appkey_encrypted = connect_with["app_key"]
+        appsecret_encrypted = connect_with["app_secret"]
 
-        #decrypt
+        # decrypt
         appkey = self.decrypt_data(self.key, appkey_encrypted)
         appsecret = self.decrypt_data(self.key, appsecret_encrypted)
 
@@ -113,32 +113,33 @@ class TestClientMethods(unittest.TestCase):
         except Exception as e:
             print("file:", Path(__file__))
             print(" in function setUpClass")
-            print("\nError:\n",e)
+            print("\nError:\n", e)
             print(" Expecting a valid appkey and appsecret")
             print(" Exiting early, cannot proceed, invalid appkey OR appsecret")
 
-
         # Get a list of methods using dir()
-        self.methods_list = [method for method in dir(self.client) if
-                       callable(getattr(self.client, method))
-                       and not method.startswith("__")
-                       and not method.startswith("_")]
+        self.methods_list = [
+            method
+            for method in dir(self.client)
+            if callable(getattr(self.client, method))
+            and not method.startswith("__")
+            and not method.startswith("_")
+        ]
 
         linked_accounts = self.client.linked_accounts().json()
         # get first linked account
-        self.account_hash_01 = linked_accounts[0].get('hashValue')
+        self.account_hash_01 = linked_accounts[0].get("hashValue")
 
     #
 
     def test_connect_client_to_api(self):
         client_obj_str = str(self.client)
 
-        pattern = re.compile(r'schwabdev.client.Client')
-        match_list = re.findall(pattern,client_obj_str)
+        pattern = re.compile(r"schwabdev.client.Client")
+        match_list = re.findall(pattern, client_obj_str)
 
         msg = "Expecting to be connected with a schwabdev.client.Client"
-        self.assertTrue(match_list == ['schwabdev.client.Client'] , msg)
-
+        self.assertTrue(match_list == ["schwabdev.client.Client"], msg)
 
     # ------------------------------------------------------------------
     # accounts() coverage
@@ -159,11 +160,11 @@ class TestClientMethods(unittest.TestCase):
         msg = "Expecting linked_accounts() to return a list"
         self.assertTrue(type(accounts_list) == list, msg)
 
-        account_dict = accounts_list[0] # get the first account
+        account_dict = accounts_list[0]  # get the first account
         msg = "Expecting accounts_list to contain a dict"
         self.assertTrue(type(account_dict) == dict, msg)
 
-        for item in ["accountNumber","hashValue"]:
+        for item in ["accountNumber", "hashValue"]:
             msg = "Expecting accountNumber and hashValue in account_dict"
             self.assertIn(item, account_dict, msg)
 
@@ -189,7 +190,7 @@ class TestClientMethods(unittest.TestCase):
 
         ada_dict = account_details_all_list[0]
         msg = "Expecting positions to be in account_details_all dict"
-        self.assertIn("positions",ada_dict["securitiesAccount"],msg)
+        self.assertIn("positions", ada_dict["securitiesAccount"], msg)
 
     def test_account_details(self):
         """
@@ -212,7 +213,8 @@ class TestClientMethods(unittest.TestCase):
 
         ad_dict = account_details_dict
         msg = "Expecting positions to be in account_details_dict"
-        self.assertIn("positions",ad_dict["securitiesAccount"], msg)
+        self.assertIn("positions", ad_dict["securitiesAccount"], msg)
+
 
 #
 
@@ -221,7 +223,8 @@ if __name__ == "__main__":
         "test_connect_client_to_api",
     ]
     test_loader = unittest.TestLoader()
-    test_loader.sortTestMethodsUser = \
-            lambda x, y: test_order.index(x) - test_order.index(y)
+    test_loader.sortTestMethodsUser = lambda x, y: test_order.index(
+        x
+    ) - test_order.index(y)
     unittest.main(testLoader=test_loader)
     unittest.main()
