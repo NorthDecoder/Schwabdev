@@ -17,6 +17,7 @@ python -m unittest test_02encryptcreds.py
 python -m unittest test_03client_connect.py
 python -m unittest test_04client_quote.py
 python -m unittest test_05client_quotes.py
+python -m unittest test_06client_account.py
 ```
 
 ## Search for and run all the tests
