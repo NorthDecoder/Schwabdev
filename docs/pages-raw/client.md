@@ -22,11 +22,12 @@ client = schwabdev.Client(
     encryption=None,
     timeout=10,
     call_on_auth=None,
-    open_browser_for_auth=True
+    open_browser_for_auth=True,
+    validate_params=True
 )
 ```
 
-* `app_key (str)`: App key credential (e.g. `"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"`).
+* `app_key (str)`: App key credential (e.g. `"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"`)
 * `app_secret (str)`: App secret credential (e.g. `"xxxxxxxxxxxxxxxx"`).
 * `callback_url (str)`: URL for callback (e.g. `"https://127.0.0.1"`).
 * `tokens_db (str)`: Path to tokens database (e.g. `"~/.schwabdev/tokens.db"`).
@@ -34,6 +35,7 @@ client = schwabdev.Client(
 * `timeout (int)`: Request timeout in seconds (how long to wait for a response).
 * `call_on_auth (function | None)`: Function to call for authentication, the function is called with one argument: the URL to visit for authentication, it is expected to return the full callback URL or code from the callback URL after the user has signed in, see an example in <a target="_blank" href="https://github.com/tylerebowers/Schwabdev/blob/main/docs/examples/extra/capture_callback.py">capture_callback.py</a>.
 * `open_browser_for_auth (bool)`: Whether to open a browser to visit the callback URL for authentication (in cases where attempting to open a webbrowser blocks the program).
+* `validate_params (bool)`: Whether to validate the parameters passed in api calls.
 
 ---
 
@@ -48,6 +50,8 @@ client = schwabdev.ClientAsync(
     encryption=None,
     timeout=10,
     call_on_auth=None,
+    open_browser_for_auth=True,
+    validate_params=True,
     parsed = False,
 )
 ```
@@ -55,6 +59,24 @@ client = schwabdev.ClientAsync(
 The parameters are the same as the synchronous client with the addition of:
 
 * `parsed (bool)`: If set to `True` then all API responses will be returned as parsed JSON objects (dictionaries/lists). This can be overridden on a per-call basis by passing `parsed=True` or `parsed=False` to the API call. Several API calls related to Orders are not parsed by default since they cannot be. The aim of autoparsing is to reduce the amount of code needed for the user.
+
+---
+
+### Saving App key and secret
+
+If you are using Schwabdev in many places on your computer then you can save your app key and app secret globally so you don't have to pass them to every Client() when made. This will create a file at ~/.schwabdev/env.json with the keys: app_key, app_secret, callback_url. You will no longer need to pass in your credentials to Client() when you create it.  
+
+Run this once with your credentials filled out to save them globally:  
+
+```python
+import schwabdev
+
+schwabdev.save_env_global(
+    app_key="your_app_key",
+    app_secret="your_app_secret",
+    callback_url="your_callback_url",
+)
+```
 
 ---
 
