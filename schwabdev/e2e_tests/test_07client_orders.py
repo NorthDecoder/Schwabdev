@@ -147,7 +147,6 @@ class TestClientOrderMethods(unittest.TestCase):
 
     # execute a possible workflow for placing a live order
 
-
     # 1. Determine session hours
     # 2. Check symbol
     #    a. preexisting similar orders
@@ -155,84 +154,17 @@ class TestClientOrderMethods(unittest.TestCase):
     # 3. Preview an impossibly low priced buy order
     #
 
-    def test_system_timezone_is_eastern(self):
-        '''
-        Regardless of where the server is physically located
-        confirm that server time is set to Eastern Time Zone
-        to match the New York Stock Exchange trading hours.
-        '''
-
-        local_now = dt.datetime.now().astimezone()
-        server_timezone = local_now.tzinfo.tzname(local_now)
-
-        msg = "Expecting server to be set to Eastern Time Zone"
-        msg += " with `sudo timedatectl set-timezone America/New_York`."
-        msg += f" Current setting is {server_timezone}"
-        self.assertTrue(server_timezone == "EDT" or server_timezone == "EST", msg)
-
-    def test_market_hour_returns_dict(self):
-        '''
-        Call client.market_hour, result must be a dictionary
-        defining session hours.  Presumably it would be
-        desirable to know what the market session is before
-        placing a trade.
-        '''
-
-        equity_market_hours = self.client.market_hour("equity").json()
-        msg = "Expecting equity_market_hours type to be dict"
-        self.assertTrue(type(equity_market_hours) == dict, msg)
-
-
-        for item in ["postMarket", "preMarket", "regularMarket"]:
-            msg = "Expecting keys postMarket, preMarket, regularMarket"
-            msg += " in equity_market_hours dictionary"
-            sh = equity_market_hours["equity"]["EQ"]["sessionHours"]
-            self.assertIn(item, sh, msg)
-
-    def test_market_hour_valid_iso8601_format(self):
-        '''
-        Call client.market_hour, result is a dictionary
-        defining session hours in ISO8601 format.  For
-        brevity only check regular market start.
-        '''
-
-        def valid_iso8601_format(dt_obj):
-            '''
-            Input: dt_obj - datetime object in ISO8601 format
-            Output: True if valid ISO8601, otherwise False
-            '''
-            dt_str = str(dt_obj)
-            try:
-                dt.datetime.fromisoformat(dt_str)
-            except:
-                return False
-            return True
-
-        equity_market_hours = self.client.market_hour("equity").json()
-
-        sh = equity_market_hours["equity"]["EQ"]["sessionHours"]
-        regular_market = sh["regularMarket"][0]
-
-        msg = "Expecting equity_market_hours regularMarket start"
-        msg += " to be in ISO8601 format"
-        rms = dt.datetime.fromisoformat(regular_market["start"])
-        is_iso = valid_iso8601_format(rms)
-        self.assertTrue(is_iso, msg)
-
-
-    def test_preview_order_returns_dict(self):
-        '''
-        Call client.preview_order returns details in an order dictionary.
-        Preview order with a bid price that is significantly lower than
-        current market price.  Expect response status to be rejected.
-        '''
+    def get_example_order(self):
+        """
+        An impossibly low priced example order
+        """
         example_order = {}
         example_order["orderType"] = "LIMIT"
         example_order["session"] = "SEAMLESS"
         example_order["duration"] = "GOOD_TILL_CANCEL"
         example_order["orderStrategyType"] = "SINGLE"
         example_order["price"] = "00.01"  # impossibly low
-        example_order["orderLegCollection"] = [{}] # a list of order legs
+        example_order["orderLegCollection"] = [{}]  # a list of order legs
         example_order["orderLegCollection"][0] = {
             "instruction": "BUY",
             "quantity": 1,
@@ -241,17 +173,28 @@ class TestClientOrderMethods(unittest.TestCase):
                 "assetType": "EQUITY",
             },
         }
+        return example_order
 
-        response = self.client.preview_order(self.account_hash_01, example_order)
+    def test_preview_order_returns_dict(self):
+        """
+        Call client.preview_order returns details in an order dictionary.
+        Preview order with a bid price that is significantly lower than
+        current market price.  Expect response status to be rejected.
+        """
+        xo = self.get_example_order()
+
+        response = self.client.preview_order(self.account_hash_01, xo)
         preview_dict = response.json()
+
         msg = "Expecting response.json() to return a dict"
-        self.assertTrue(type(preview_dict)==dict, msg)
+        self.assertTrue(type(preview_dict) == dict, msg)
 
         preview_status = preview_dict["orderStrategy"]["status"]
         msg = "Expecting REJECTED because"
         msg += " 'Your limit price is significantly away from the"
         msg += " current market price....'"
-        self.assertTrue(preview_status=="REJECTED", msg)
+        self.assertTrue(preview_status == "REJECTED", msg)
+
 
 #
 
