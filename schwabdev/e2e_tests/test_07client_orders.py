@@ -195,6 +195,47 @@ class TestClientOrderMethods(unittest.TestCase):
         msg += " current market price....'"
         self.assertTrue(preview_status == "REJECTED", msg)
 
+    def test_place_low_order_rejected(self):
+        """
+        Call client.place_order returns empty text if order is received.
+        Place order with a bid price that is significantly lower than
+        current market price.
+
+        Expect order_details response status to be rejected.
+
+        Places a live order that will be automatically cancelled
+        by the trade servers because the order price is too low.
+        """
+
+        xo = self.get_example_order()
+        response = self.client.place_order(self.account_hash_01, xo)
+
+        response_obj_str = str(type(response))
+        pattern = re.compile(r"requests.models.Response")
+        match_list = re.findall(pattern, response_obj_str)
+        msg = "Expecting response type to be class 'requests.models.Response'"
+        self.assertTrue(match_list == ["requests.models.Response"], msg)
+
+        # Ok only means there was an http response,
+        # NOT that there were no errors
+        msg = "Expecting response.ok to be True"
+        self.assertTrue(response.ok, msg)
+
+        # If order successfully received
+        msg = "Expecting response.text to be empty"
+        self.assertTrue(response.text == "", msg)
+
+        if response.ok: # get the order details
+            order_id = response.headers.get('location', '/').split('/')[-1]
+            od_response = self.client.order_details(self.account_hash_01, order_id)
+            od_dict = od_response.json()
+            od_status = od_dict["status"]
+
+        # Expectng
+        # 'statusDescription': 'Your limit price is significantly away from the current '
+        # 'market price.  Please adjust your order.'
+        msg = "Expecting low order away from market price to be rejected."
+        self.assertTrue(od_status == "REJECTED", msg)
 
 #
 
